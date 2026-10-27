@@ -1,0 +1,27 @@
+name: TamilMV to TorBox Sync
+
+on:
+  schedule:
+    - cron: '*/10 * * * *' # Runs every 10 minutes
+  workflow_dispatch: # Allows you to run it manually from GitHub anytime
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run sync script
+        env:
+          TORBOX_API_KEY: ${{ secrets.TORBOX_API_KEY }}
+          SESSION_COOKIE: ${{ secrets.SESSION_COOKIE }}
+        run: node index.js
